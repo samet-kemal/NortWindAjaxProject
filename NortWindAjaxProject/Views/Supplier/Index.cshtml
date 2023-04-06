@@ -1,0 +1,252 @@
+﻿
+<div class="supplierListDiv">
+		<table class="table table-dark supplierTable">
+			<thead>
+				<h1>Suppliers</h1>
+				<a class="btn btn-outline-success" id="addBtn">Add Supplier</a>
+				<tr>
+				    <td>Company Name</td>
+					<td>Contact Name</td>
+					<td>Address</td>
+					<td>City</td>
+					<td>Country</td>
+					<td>Phone</td>
+					<td>Update</td>
+					<td>Delete</td>
+
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+				   <td class="supplierCompany"></td>
+					<td class="supplierContact"></td>
+					<td class="supplierAddress"></td>
+					<td class="supplierCity"></td>
+					<td class="supplierCountry"></td>
+					<td class="supplierPhone"></td>
+					<td>
+						<span>
+						<a class=" btn btn-primary " id="updateBtn" name="updateBtn" data-id="">Update</a>
+						</span>
+					</td>
+				<td>
+					<span>
+						<a class=" btn btn-danger deleteBtn" data-id="">Delete</a>
+					</span>
+				</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+<div>
+	<form class="form-control">
+		<div class="form-group">
+			<label>Company Name </label>
+			<input id="companyName" name="companyName" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label>Contact Name </label>
+			<input id="contactName" name="contactName" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label>Address </label>
+			<input id="address" name="address" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label>City </label>
+			<input id="city" name="city" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label>Country </label>
+			<input id="country" name="country" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label>Phone </label>
+			<input id="phone" name="phone" class="form-control" />
+		</div>
+		<div class="form-group">
+			<a class="btn btn-primary" id="updateSupplier" data-id=""> Update</a>
+			<a class="btn btn-primary" id="addSupplier" data-id=""> Create</a>
+
+		</div>
+	</form>
+</div>
+
+
+
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+	$(document).ready(function(){
+		$(".form-control").hide();
+		$(".supplierListDiv").show();
+	    loadDataFromAjax();
+
+		//-------------------------SUPPLIERLIST AJAX REQUEST-----------------------------------//
+
+		var baseRow=$(".supplierTable tbody tr").first().clone();
+		function loadDataFromAjax(){
+		$.ajax({
+			url: "@Url.Action("GetAll","Supplier")",
+			method:"GET",
+			success:function(res){
+				console.log("Success");
+				console.log("result:",res);
+				$.each(res,function(index,value){
+					createRow(value);
+				});
+				$(".supplierTable tbody tr ").first().remove();
+
+			},error:function(res){
+				alert("Failed:"+res);
+			}
+		});
+
+		};
+
+
+		//---------Update Clicked From Table-----------------//
+		$(document).on("click", "#updateBtn", function (event) {
+			var supplierId = $(event.currentTarget).attr("data-id");
+			console.log("Update Clicked");
+			console.log("supplierIdFirst:", supplierId);
+			$("#updateSupplier").attr("data-id", supplierId);
+			
+			$("#updateSupplier").show();
+			$("#addSupplier").hide();
+			$(".form-control").show();
+			$(".supplierListDiv").hide();
+		});
+
+
+		//------------------------Add Clicked From Table--------------------//
+		$(document).on("click", "#addBtn",function(){
+			
+			$("#addSupplier").show();
+			$("#updateSupplier").hide();
+			$(".form-control").show();
+			$(".supplierListDiv").hide();
+		});
+
+
+		//-------------------------UPDATE AJAX REQUEST-----------------------------------//
+
+		$(document).on("click", "#updateSupplier",function(event){
+			var supplierID = $(event.currentTarget).attr("data-id");
+			        var data = { 
+						"CompanyName":$("#companyName").val(),
+						"ContactName": $("#contactName").val(),
+						"Address": $("#address").val(),
+						"City": $("#city").val(),
+						"Country": $("#country").val(),
+						"Phone": $("#phone").val(),
+				        "SupplierID": supplierID
+					};
+
+           	    console.log("UpdateSupplier CLicked data:",data);
+			console.log("supplierId:", supplierID);
+				$.ajax({
+				dataType: "json",
+				contentType: "application/json; charset=utf-8",
+					url:"@Url.Action("Edit","Supplier")",
+					method:"POST",
+				data: JSON.stringify(data),
+				
+					success:function(res){
+						alert("Updated succesfully");
+					$(".supplierTable tbody tr").remove();
+					   loadDataFromAjax();
+					$(".form-control").hide();
+					$(".supplierListDiv").show();
+
+						console.log("Successful");
+
+						createRow(data);
+					},error:function(res){
+						alert("Failed:" + res);
+					}
+				});
+		});
+
+		//-------------------------CREATE AJAX REQUEST-----------------------------------//
+
+		$(document).on("click", "#addSupplier", function () {
+				    var supplierToCreate = { 
+						"CompanyName":$("#companyName").val(),
+						"ContactName": $("#contactName").val(),
+						"Address": $("#address").val(),
+						"City": $("#city").val(),
+						"Country": $("#country").val(),
+						"Phone": $("#phone").val()
+					};
+
+					$.ajax({
+						dataType: "json",
+						contentType: "application/json; charset=utf-8",
+						url:"@Url.Action("Add","Supplier")",
+				        data: JSON.stringify(supplierToCreate),
+						method:"POST",
+
+						success: function (res) {
+							alert("Updated succesfully");
+							console.log("Successful");
+
+							createRow(data);
+						}, error: function (res) {
+							alert("Failed:" + res);
+						}
+
+
+
+					});
+
+
+		});
+
+
+
+		//-------------------------DELETE AJAX REQUEST-----------------------------------//
+
+		$(document).on("click", ".deleteBtn", function (event) {
+			var supplierIdToDelete = $(event.currentTarget).attr("data-id");
+			$.ajax({
+
+				url: "@Url.Action("Delete","Supplier")",
+				method: "POST",
+				data: { "supplierId": supplierIdToDelete },
+					success: function (res) {
+					alert("Deleted succesfully");
+					$(event.currentTarget).parent().parent().parent().remove();
+					console.log("Successful");
+				}, error: function (res) {
+					alert("Failed:" + res);
+				}
+
+			});
+
+
+		});
+
+		function createRow(res)
+		{
+			var tempRow = $(baseRow).clone();
+			$(tempRow).find(".supplierCompany").first().text(res.companyName);
+			$(tempRow).find(".supplierContact").first().text(res.contactName);
+			$(tempRow).find(".supplierAddress").first().text(res.address);
+			$(tempRow).find(".supplierCity").first().text(res.city);
+			$(tempRow).find(".supplierCountry").first().text(res.country);
+			$(tempRow).find(".supplierPhone").first().text(res.phone);
+			$(tempRow).find("#updateBtn").first().attr("data-id", res.supplierID);
+			$(tempRow).find(".deleteBtn").first().attr("data-id", res.supplierID);
+			$(".supplierTable tbody").append(tempRow);
+
+		}
+
+
+	});
+
+</script>
