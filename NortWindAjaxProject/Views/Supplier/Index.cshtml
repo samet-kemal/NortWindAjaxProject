@@ -43,27 +43,27 @@
 	<form class="form-control">
 		<div class="form-group">
 			<label>Company Name </label>
-			<input id="companyName" name="companyName" class="form-control" />
+			<input id="companyName"  name="companyName" class="form-control" />
 		</div>
 		<div class="form-group">
 			<label>Contact Name </label>
-			<input id="contactName" name="contactName" class="form-control" />
+			<input id="contactName"  name="contactName" class="form-control" />
 		</div>
 		<div class="form-group">
 			<label>Address </label>
-			<input id="address" name="address" class="form-control" />
+			<input id="address"  name="address" class="form-control" />
 		</div>
 		<div class="form-group">
 			<label>City </label>
-			<input id="city" name="city" class="form-control" />
+			<input id="city"  name="city" class="form-control" />
 		</div>
 		<div class="form-group">
 			<label>Country </label>
-			<input id="country" name="country" class="form-control" />
+			<input id="country"  name="country" class="form-control" />
 		</div>
 		<div class="form-group">
 			<label>Phone </label>
-			<input id="phone" name="phone" class="form-control" />
+			<input id="phone"  name="phone" class="form-control" />
 		</div>
 		<div class="form-group">
 			<a class="btn btn-primary" id="updateSupplier" data-id=""> Update</a>
@@ -109,13 +109,16 @@
 		};
 
 
-		//---------Update Clicked From Table-----------------//
+		//----------------------Update Clicked From Table-------------------------------------//
 		$(document).on("click", "#updateBtn", function (event) {
 			var supplierId = $(event.currentTarget).attr("data-id");
 			console.log("Update Clicked");
 			console.log("supplierIdFirst:", supplierId);
 			$("#updateSupplier").attr("data-id", supplierId);
 			
+			GetSelectedSupplier(supplierId);
+
+
 			$("#updateSupplier").show();
 			$("#addSupplier").hide();
 			$(".form-control").show();
@@ -123,9 +126,17 @@
 		});
 
 
-		//------------------------Add Clicked From Table--------------------//
+		//------------------------Add Clicked From Table-------------------------------------//
 		$(document).on("click", "#addBtn",function(){
-			
+
+			//-----Form Clean
+			$("#companyName").val(" ");
+			$("#contactName").val(" ");
+			$("#address").val(" ");
+			$("#city").val(" ");
+			$("#country").val(" ");
+			$("#phone").val(" ");
+			//---------
 			$("#addSupplier").show();
 			$("#updateSupplier").hide();
 			$(".form-control").show();
@@ -133,7 +144,7 @@
 		});
 
 
-		//-------------------------UPDATE AJAX REQUEST-----------------------------------//
+		//-------------------------UPDATE AJAX REQUEST----------------------------------------//
 
 		$(document).on("click", "#updateSupplier",function(event){
 			var supplierID = $(event.currentTarget).attr("data-id");
@@ -146,6 +157,7 @@
 						"Phone": $("#phone").val(),
 				        "SupplierID": supplierID
 					};
+
 
            	    console.log("UpdateSupplier CLicked data:",data);
 			console.log("supplierId:", supplierID);
@@ -172,7 +184,7 @@
 				});
 		});
 
-		//-------------------------CREATE AJAX REQUEST-----------------------------------//
+		//-------------------------CREATE AJAX REQUEST-----------------------------------------//
 
 		$(document).on("click", "#addSupplier", function () {
 				    var supplierToCreate = { 
@@ -192,10 +204,12 @@
 						method:"POST",
 
 						success: function (res) {
-							alert("Updated succesfully");
-							console.log("Successful");
+							alert("Created succesfully");
+							console.log("Successful REs:",res);
+							$(".form-control").hide();
+							$(".supplierListDiv").show();
 
-							createRow(data);
+							createRow(res);
 						}, error: function (res) {
 							alert("Failed:" + res);
 						}
@@ -209,7 +223,7 @@
 
 
 
-		//-------------------------DELETE AJAX REQUEST-----------------------------------//
+		//-------------------------DELETE AJAX REQUEST-------------------------------------------//
 
 		$(document).on("click", ".deleteBtn", function (event) {
 			var supplierIdToDelete = $(event.currentTarget).attr("data-id");
@@ -230,6 +244,44 @@
 
 
 		});
+
+
+		//-------------------------GET ByID AJAX REQUEST-------------------------------------------//
+		function GetSelectedSupplier(supplierId) {
+			var selected;
+			$.ajax({
+
+				url: "@Url.Action("GetById","Supplier")",
+				method:"GET",
+				data: { "supplierId": supplierId },
+				success:function(res){
+					console.log("loadedSupplierbyId:",res);
+
+					$("#companyName").val(res.companyName);
+
+					$("#contactName").val(res.contactName);
+
+					$("#address").val(res.address);
+
+					$("#city").val(res.city);
+
+					$("#country").val(res.country);
+
+					$("#phone").val(res.phone);
+
+
+				},error:function(){
+					console.log("Failed To Load Supplier!");
+				}
+
+			});
+			return selected;
+
+
+
+		}
+
+
 
 		function createRow(res)
 		{

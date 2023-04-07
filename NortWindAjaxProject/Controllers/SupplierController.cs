@@ -20,7 +20,7 @@ namespace NortWindAjaxProject.Controllers
 
         public async Task<ActionResult> GetAll()
         {
-           var res=await _service.GetAllSuppliers();
+            var res = await _service.GetAllSuppliers();
             if (res.Succes)
             {
                 return Ok(res.Data);

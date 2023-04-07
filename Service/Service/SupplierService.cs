@@ -68,6 +68,7 @@ namespace Service.Service
         {
             var query = @"SELECT
                             SupplierID,
+                            CompanyName,
 		                    ContactName,
 		                    Address,
 		                    City,
@@ -109,7 +110,7 @@ namespace Service.Service
 
         }
 
-        public async Task<CustomResponseViewModel<int>> AddSupplier(CreateSupplierViewModel supplier)
+        public async Task<CustomResponseViewModel<SupplierResponse>> AddSupplier(CreateSupplierViewModel supplier)
         {
             var query = @"  INSERT INTO Suppliers
                                           (CompanyName,
@@ -118,6 +119,14 @@ namespace Service.Service
 	                                      City,
 	                                      Country,
 	                                      Phone)
+										  Output 
+										  inserted.SupplierID,
+										  Inserted.CompanyName,
+	                                      Inserted.ContactName,
+	                                      Inserted.Address,
+	                                      Inserted.City,
+	                                      Inserted.Country,
+	                                      Inserted.Phone
 	                                      VALUES(
                                           @CompanyName,
 	                                      @ContactName,
@@ -126,7 +135,7 @@ namespace Service.Service
 	                                      @Country,
 	                                      @Phone
 	                                    	)";
-            var response= new CustomResponseViewModel<int>();
+            var response= new CustomResponseViewModel<SupplierResponse>();
             var param = new
             {
                 CompanyName = supplier.CompanyName,
@@ -141,10 +150,10 @@ namespace Service.Service
             {
             using(var connection=new SqlConnection(_dapperContext.CreateConnectionString()))
             {
-                var result=await connection.ExecuteAsync(query, param);
-                if (result>0)
+                var result=await connection.QueryAsync<SupplierResponse>(query, param);
+                if (result.Count() != 0)
                 {
-                    response.Data = result;
+                    response.Data = result.FirstOrDefault();
                     response.Succes = true;
                 }
                 else

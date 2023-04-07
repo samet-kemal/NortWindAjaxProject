@@ -12,7 +12,7 @@ namespace Service.Interfaces
     {
         Task<CustomResponseViewModel<List<SupplierResponse>>> GetAllSuppliers();
         Task<CustomResponseViewModel<SupplierResponse>> GetSupplierById(int supplierId);
-        Task<CustomResponseViewModel<int>> AddSupplier(CreateSupplierViewModel supplier);
+        Task<CustomResponseViewModel<SupplierResponse>> AddSupplier(CreateSupplierViewModel supplier);
         Task<CustomResponseViewModel<int>> UpdateSupplier(SupplierResponse supplier);
         Task<CustomResponseViewModel<int>> DeleteSupplier(int supplierId);
 
