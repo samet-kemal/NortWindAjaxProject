@@ -75,7 +75,7 @@ namespace NortWindAjaxProject.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Delete(int supplierId)
+        public async Task<ActionResult> Delete([FromForm]int supplierId)
         {
             var res = await _service.DeleteSupplier(supplierId);
             if (res.Succes)

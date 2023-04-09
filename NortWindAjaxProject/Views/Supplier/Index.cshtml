@@ -40,30 +40,39 @@
 	</div>
 
 <div>
-	<form class="form-control">
+	<form class="form-control" id="infoForm">
 		<div class="form-group">
 			<label>Company Name </label>
-			<input id="companyName"  name="companyName" class="form-control" />
+			<input id="companyName"  name="companyName" required maxlength="40" class="form-control" />
+			<span class="error text-danger companyError" hidden="hidden">This field is required</span>
+
 		</div>
 		<div class="form-group">
 			<label>Contact Name </label>
-			<input id="contactName"  name="contactName" class="form-control" />
+			<input id="contactName" name="contactName" required maxlength="30" class="form-control" />
+			<span class="error text-danger contactError" hidden="hidden">This field must be between 5-30</span>
+
 		</div>
 		<div class="form-group">
 			<label>Address </label>
-			<input id="address"  name="address" class="form-control" />
+			<input id="address" name="address" required maxlength="60" class="form-control" />
+			<span class="error text-danger addressError" hidden="hidden">This field must be between 5-60</span>
 		</div>
 		<div class="form-group">
 			<label>City </label>
-			<input id="city"  name="city" class="form-control" />
+			<input id="city" name="city" required maxlength="15" class="form-control" />
+			<span class="error text-danger cityError" hidden="hidden">This field must be between 5-15</span>
 		</div>
 		<div class="form-group">
 			<label>Country </label>
-			<input id="country"  name="country" class="form-control" />
+			<input id="country" name="country" required maxlength="15" class="form-control" />
+			<span class="error text-danger countryError" hidden="hidden">This field must be between 5-15</span>
 		</div>
 		<div class="form-group">
 			<label>Phone </label>
-			<input id="phone"  name="phone" class="form-control" />
+			<input id="phone" name="phone" required maxlength="15" class="form-control" />
+			<span class="error text-danger phoneError" hidden="hidden">This field must be between 5-15</span>
+
 		</div>
 		<div class="form-group">
 			<a class="btn btn-primary" id="updateSupplier" data-id=""> Update</a>
@@ -72,14 +81,11 @@
 		</div>
 	</form>
 </div>
-
-
-
-
-
-
-
+<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+
 <script>
 	$(document).ready(function(){
 		$(".form-control").hide();
@@ -116,7 +122,7 @@
 			console.log("supplierIdFirst:", supplierId);
 			$("#updateSupplier").attr("data-id", supplierId);
 			
-			GetSelectedSupplier(supplierId);
+			getSelectedSupplier(supplierId);
 
 
 			$("#updateSupplier").show();
@@ -129,14 +135,14 @@
 		//------------------------Add Clicked From Table-------------------------------------//
 		$(document).on("click", "#addBtn",function(){
 
-			//-----Form Clean
+			//-----Form Clean Form------//
 			$("#companyName").val(" ");
 			$("#contactName").val(" ");
 			$("#address").val(" ");
 			$("#city").val(" ");
 			$("#country").val(" ");
 			$("#phone").val(" ");
-			//---------
+			//----------------------------//
 			$("#addSupplier").show();
 			$("#updateSupplier").hide();
 			$(".form-control").show();
@@ -147,6 +153,7 @@
 		//-------------------------UPDATE AJAX REQUEST----------------------------------------//
 
 		$(document).on("click", "#updateSupplier",function(event){
+			if ($("#infoForm").valid()){
 			var supplierID = $(event.currentTarget).attr("data-id");
 			        var data = { 
 						"CompanyName":$("#companyName").val(),
@@ -160,63 +167,79 @@
 
 
            	    console.log("UpdateSupplier CLicked data:",data);
-			console.log("supplierId:", supplierID);
-				$.ajax({
-				dataType: "json",
-				contentType: "application/json; charset=utf-8",
-					url:"@Url.Action("Edit","Supplier")",
-					method:"POST",
-				data: JSON.stringify(data),
-				
-					success:function(res){
+			    console.log("supplierId:", supplierID);
+
+			$.ajax({
+					dataType: "json",
+					contentType: "application/json; charset=utf-8",
+					url: "@Url.Action("Edit","Supplier")",
+					method: "POST",
+					data: JSON.stringify(data),
+
+					success: function (res) {
 						alert("Updated succesfully");
-					$(".supplierTable tbody tr").remove();
-					   loadDataFromAjax();
-					$(".form-control").hide();
-					$(".supplierListDiv").show();
+						$(".supplierTable tbody tr").remove();
+						loadDataFromAjax();
+						$(".form-control").hide();
+						$(".supplierListDiv").show();
 
 						console.log("Successful");
 
 						createRow(data);
-					},error:function(res){
+					}, error: function (res) {
 						alert("Failed:" + res);
 					}
-				});
+			});
+
+			}
+			else {
+				alert("Please Check Your Form İnformation Again!");
+			}
 		});
 
 		//-------------------------CREATE AJAX REQUEST-----------------------------------------//
 
 		$(document).on("click", "#addSupplier", function () {
-				    var supplierToCreate = { 
-						"CompanyName":$("#companyName").val(),
-						"ContactName": $("#contactName").val(),
-						"Address": $("#address").val(),
-						"City": $("#city").val(),
-						"Country": $("#country").val(),
-						"Phone": $("#phone").val()
-					};
 
-					$.ajax({
-						dataType: "json",
-						contentType: "application/json; charset=utf-8",
-						url:"@Url.Action("Add","Supplier")",
-				        data: JSON.stringify(supplierToCreate),
-						method:"POST",
+			if ($("#infoForm").valid()) {
+				var supplierToCreate = {
+					"CompanyName": $("#companyName").val(),
+					"ContactName": $("#contactName").val(),
+					"Address": $("#address").val(),
+					"City": $("#city").val(),
+					"Country": $("#country").val(),
+					"Phone": $("#phone").val()
+				};
 
-						success: function (res) {
-							alert("Created succesfully");
-							console.log("Successful REs:",res);
-							$(".form-control").hide();
-							$(".supplierListDiv").show();
+				$.ajax({
+					dataType: "json",
+					contentType: "application/json; charset=utf-8",
+					url: "@Url.Action("Add","Supplier")",
+					data: JSON.stringify(supplierToCreate),
+					method: "POST",
 
-							createRow(res);
-						}, error: function (res) {
-							alert("Failed:" + res);
-						}
+					success: function (res) {
+						alert("Created succesfully");
+						console.log("Successful REs:", res);
+						$(".form-control").hide();
+						$(".supplierListDiv").show();
+
+						createRow(res);
+					}, error: function (res) {
+						alert("Failed:" + res);
+					}
 
 
 
-					});
+				});
+
+			     }
+			else{
+				alert("Please Check Your Form İnformation Again!");
+			};
+							
+
+
 
 
 		});
@@ -227,27 +250,31 @@
 
 		$(document).on("click", ".deleteBtn", function (event) {
 			var supplierIdToDelete = $(event.currentTarget).attr("data-id");
-			$.ajax({
+			if (confirm("Are You Sure? The Supplier Will Delete")){
+					$.ajax({
 
-				url: "@Url.Action("Delete","Supplier")",
-				method: "POST",
-				data: { "supplierId": supplierIdToDelete },
-					success: function (res) {
-					alert("Deleted succesfully");
-					$(event.currentTarget).parent().parent().parent().remove();
-					console.log("Successful");
-				}, error: function (res) {
-					alert("Failed:" + res);
-				}
+						url: "@Url.Action("Delete","Supplier")",
+						method: "POST",
+						data: { "supplierId": supplierIdToDelete },
+							success: function (res) {
+							alert("Deleted succesfully");
+							$(event.currentTarget).parent().parent().parent().remove();
+							console.log("Successful");
+						}, error: function (res) {
+							alert("Failed:" + res);
+						}
 
-			});
+			         });
+
+			}
+			
 
 
 		});
 
 
 		//-------------------------GET ByID AJAX REQUEST-------------------------------------------//
-		function GetSelectedSupplier(supplierId) {
+		function getSelectedSupplier(supplierId) {
 			var selected;
 			$.ajax({
 
@@ -281,8 +308,6 @@
 
 		}
 
-
-
 		function createRow(res)
 		{
 			var tempRow = $(baseRow).clone();
@@ -297,6 +322,168 @@
 			$(".supplierTable tbody").append(tempRow);
 
 		}
+
+
+		//------------------------Validation-------------------------------------//
+
+		/*
+		function ValidateCompanyName(){
+
+	    var valid;
+		var companyNameForValid = $("#companyName").val();
+	    if (companyNameForValid.trim()) {
+			valid=true;
+				$('.companyError').attr("hidden", "hidden");
+		}else{
+				$(".companyError").removeAttr("hidden");
+			valid=false;
+		}
+			console.log("ValidCompany=", valid);
+		return valid;
+		};
+
+		function ValidateCountryLength(){
+
+			var valid;
+			var countryLength = $("#country").val().trim().length;
+			if (countryLength >= 5 && countryLength <= 15) {
+				valid = true;
+				$('.countryError').attr("hidden","hidden");
+			} else {
+				$('.countryError').removeAttr("hidden");
+				valid = false;
+			}
+			console.log("ValidCountry=", valid);
+			return valid;
+		};
+
+		function ValidateContactLength() {
+
+			var valid;
+			var countryLength = $("#contactName").val().trim().length;
+			if (countryLength >= 5 && countryLength <= 30) {
+				valid = true;
+				$('.contactError').attr("hidden", "hidden");
+			} else {
+				$('.contactError').removeAttr("hidden");
+				valid = false;
+			}
+			return valid;
+		};
+
+		function ValidateAddressLength() {
+
+			var valid;
+			var countryLength = $("#address").val().trim().length;
+			if (countryLength >= 5 && countryLength <= 60) {
+				valid = true;
+				$('.addressError').attr("hidden", "hidden");
+			} else {
+				$('.addressError').removeAttr("hidden");
+				valid = false;
+			}
+			return valid;
+		};
+
+		function ValidatePhoneLength() {
+
+			var valid;
+			var phoneLength = $("#phone").val().trim().length;
+			if (phoneLength >= 5 && phoneLength <= 24) {
+				valid = true;
+				$('.phoneError').attr("hidden", "hidden");
+			} else {
+				$('.phoneError').removeAttr("hidden");
+				valid = false;
+			}
+			return valid;
+		};
+
+		function ValidateCityLength() {
+
+			var valid;
+			var cityLength = $("#city").val().trim().length;
+			if (cityLength >= 5 && cityLength <= 15) {
+				valid = true;
+				$('.cityError').attr("hidden", "hidden");
+			} else {
+				$('.cityError').removeAttr("hidden");
+				valid = false;
+			}
+			return valid;
+		};
+*/
+
+			$("#infoForm").validate({
+				errorClass: "error fail-alert",
+				validClass: "valid success-alert",
+				rules: {
+					companyName: {
+						required: true,
+						minlength: 5,
+						maxlength: 15
+					},
+					contactName: {
+						required: true,
+						minlength: 5,
+						maxlength: 15
+					},
+					address: {
+						required: true,
+						minlength: 5,
+						maxlength: 60
+					},
+					city: {
+						required: true,
+						minlength: 5,
+						maxlength: 15
+					},
+					country: {
+						required: true,
+						minlength: 5,
+						maxlength: 15
+					},
+					phone: {
+						required: true,
+						minlength: 5,
+						maxlength: 24
+					}
+				},
+				messages: {
+					companyName: {
+						required: "Please fill this area",
+						minlength: "This Area should be at least 5 characters"
+
+					},
+					contactName: {
+						required: "Please fill this area",
+						minlength: "This Area should be at least 5 characters"
+					},
+					address: {
+						required: "Please fill this area",
+						minlength: "This Area should be at least 5 characters"
+					},
+					city: {
+						required: "Please fill this area",
+						minlength: "This Area should be at least 5 characters"
+					},
+					country: {
+						required: "Please fill this area",
+						minlength: "This Area should be at least 5 characters"
+					},
+					phone: {
+						required: "Please fill this area",
+						minlength: "This Area should be at least 5 characters"
+
+					}
+
+
+
+				}
+
+
+			});
+
 
 
 	});
