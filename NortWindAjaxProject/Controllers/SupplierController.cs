@@ -1,5 +1,6 @@
 ﻿using Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Service.Interfaces;
 
 namespace NortWindAjaxProject.Controllers
@@ -7,13 +8,16 @@ namespace NortWindAjaxProject.Controllers
     public class SupplierController : Controller
     {
         private readonly ISupplierService _service;
-        public SupplierController(ISupplierService service)
+        private readonly IStringLocalizer<SupplierController> _localizer;
+        public SupplierController(ISupplierService service, IStringLocalizer<SupplierController> localizer)
         {
+            _localizer= localizer;
             _service = service;
         }
 
         public IActionResult Index()
         {
+            ViewData["Suppliers"] = _localizer["Suppliers"];
             return View();
         }
 

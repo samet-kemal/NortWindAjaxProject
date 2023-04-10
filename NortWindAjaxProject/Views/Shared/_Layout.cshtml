@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+@inject IViewLocalizer Localizer
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -19,8 +20,11 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        <a class="nav-link active" asp-area="" asp-controller="Supplier" asp-action="Index">Suppliers</a>
+                        <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">@Localizer["Home"]</a>
+                        <a class="nav-link active" asp-area="" asp-controller="Supplier" asp-action="Index">@Localizer["Suppliers"]</a>
+                    </div>
+                    <div class ="navbar-nav">
+                        @await Html.PartialAsync("SelectLanguagePartial")
 
                     </div>
                 </div>
@@ -31,11 +35,12 @@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+
     </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - NortWindAjaxProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2023 - NortWindAjaxProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -52,10 +57,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    <script>
-        $(".navbar-toggler").on('click',function(){
-            $(".collapse").collapse("hide");
-        });
-    </script>
+
 </body>
 </html>

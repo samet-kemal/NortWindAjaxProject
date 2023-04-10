@@ -1,18 +1,26 @@
-﻿
+﻿@using Microsoft.Extensions.Options
+@using Microsoft.AspNetCore.Localization
+
+@inject IViewLocalizer Localizer
+@inject IOptions<RequestLocalizationOptions> LocOptions
+
+@{
+	ViewData["Title"] = Localizer["Suppliers"];
+}
 <div class="supplierListDiv">
 		<table class="table table-dark supplierTable">
 			<thead>
-				<h1>Suppliers</h1>
-				<a class="btn btn-outline-success" id="addBtn">Add Supplier</a>
+			<h1>@Localizer["Suppliers"]</h1>
+				<a class="btn btn-outline-success" id="addBtn">@Localizer["Add Supplier"]</a>
 				<tr>
-				    <td>Company Name</td>
-					<td>Contact Name</td>
-					<td>Address</td>
-					<td>City</td>
-					<td>Country</td>
-					<td>Phone</td>
-					<td>Update</td>
-					<td>Delete</td>
+				    <td>@Localizer["Company Name"]</td>
+					<td>@Localizer["Contact Name"]</td>
+					<td>@Localizer["Address"]</td>
+					<td>@Localizer["City"]</td>
+					<td>@Localizer["Country"]</td>
+					<td>@Localizer["Phone"]</td>
+					<td>@Localizer["Update"]</td>
+					<td>@Localizer["Delete"	 ]</td>
 
 				</tr>
 			</thead>
@@ -26,12 +34,12 @@
 					<td class="supplierPhone"></td>
 					<td>
 						<span>
-						<a class=" btn btn-primary " id="updateBtn" name="updateBtn" data-id="">Update</a>
+						<a class=" btn btn-primary " id="updateBtn" name="updateBtn" data-id="">@Localizer["Update"]</a>
 						</span>
 					</td>
 				<td>
 					<span>
-						<a class=" btn btn-danger deleteBtn" data-id="">Delete</a>
+						<a class=" btn btn-danger deleteBtn" data-id="">@Localizer["Delete"]</a>
 					</span>
 				</td>
 				</tr>
@@ -42,41 +50,41 @@
 <div>
 	<form class="form-control" id="infoForm">
 		<div class="form-group">
-			<label>Company Name </label>
+			<label>@Localizer["Company Name"] </label>
 			<input id="companyName"  name="companyName" required maxlength="40" class="form-control" />
-			<span class="error text-danger companyError" hidden="hidden">This field is required</span>
+			<span class="error text-danger companyError" hidden="hidden">@Localizer["companyError"]</span>
 
 		</div>
 		<div class="form-group">
-			<label>Contact Name </label>
+			<label>@Localizer["Contact Name"] </label>
 			<input id="contactName" name="contactName" required maxlength="30" class="form-control" />
-			<span class="error text-danger contactError" hidden="hidden">This field must be between 5-30</span>
+			<span class="error text-danger contactError" hidden="hidden">@Localizer["contactError"]</span>
 
 		</div>
 		<div class="form-group">
-			<label>Address </label>
+			<label>@Localizer["Address"] </label>
 			<input id="address" name="address" required maxlength="60" class="form-control" />
-			<span class="error text-danger addressError" hidden="hidden">This field must be between 5-60</span>
+			<span class="error text-danger addressError" hidden="hidden">@Localizer["addressError"]</span>
 		</div>
 		<div class="form-group">
-			<label>City </label>
+			<label>@Localizer["City"]</label>
 			<input id="city" name="city" required maxlength="15" class="form-control" />
-			<span class="error text-danger cityError" hidden="hidden">This field must be between 5-15</span>
+			<span class="error text-danger cityError" hidden="hidden">@Localizer["cityError"]</span>
 		</div>
 		<div class="form-group">
-			<label>Country </label>
+			<label>@Localizer["Country"]</label>
 			<input id="country" name="country" required maxlength="15" class="form-control" />
-			<span class="error text-danger countryError" hidden="hidden">This field must be between 5-15</span>
+			<span class="error text-danger countryError" hidden="hidden">@Localizer["countryError"]</span>
 		</div>
 		<div class="form-group">
-			<label>Phone </label>
+			<label>@Localizer["Phone"] </label>
 			<input id="phone" name="phone" required maxlength="15" class="form-control" />
-			<span class="error text-danger phoneError" hidden="hidden">This field must be between 5-15</span>
+			<span class="error text-danger phoneError" hidden="hidden">@Localizer["phoneError"]</span>
 
 		</div>
 		<div class="form-group">
-			<a class="btn btn-primary" id="updateSupplier" data-id=""> Update</a>
-			<a class="btn btn-primary" id="addSupplier" data-id=""> Create</a>
+			<a class="btn btn-primary" id="updateSupplier" data-id="">@Localizer["Update"]</a>
+			<a class="btn btn-primary" id="addSupplier" data-id="">@Localizer["Create"]</a>
 
 		</div>
 	</form>
@@ -326,93 +334,17 @@
 
 		//------------------------Validation-------------------------------------//
 
-		/*
-		function ValidateCompanyName(){
+	@{
+		var currentRequestCulture = Context.Features.Get<IRequestCultureFeature>();
 
-	    var valid;
-		var companyNameForValid = $("#companyName").val();
-	    if (companyNameForValid.trim()) {
-			valid=true;
-				$('.companyError').attr("hidden", "hidden");
-		}else{
-				$(".companyError").removeAttr("hidden");
-			valid=false;
-		}
-			console.log("ValidCompany=", valid);
-		return valid;
-		};
+	};		
+	
 
-		function ValidateCountryLength(){
+	 var lang="@currentRequestCulture.RequestCulture.UICulture.Name)";
+		console.log("lANGUAGE:",lang);
 
-			var valid;
-			var countryLength = $("#country").val().trim().length;
-			if (countryLength >= 5 && countryLength <= 15) {
-				valid = true;
-				$('.countryError').attr("hidden","hidden");
-			} else {
-				$('.countryError').removeAttr("hidden");
-				valid = false;
-			}
-			console.log("ValidCountry=", valid);
-			return valid;
-		};
 
-		function ValidateContactLength() {
 
-			var valid;
-			var countryLength = $("#contactName").val().trim().length;
-			if (countryLength >= 5 && countryLength <= 30) {
-				valid = true;
-				$('.contactError').attr("hidden", "hidden");
-			} else {
-				$('.contactError').removeAttr("hidden");
-				valid = false;
-			}
-			return valid;
-		};
-
-		function ValidateAddressLength() {
-
-			var valid;
-			var countryLength = $("#address").val().trim().length;
-			if (countryLength >= 5 && countryLength <= 60) {
-				valid = true;
-				$('.addressError').attr("hidden", "hidden");
-			} else {
-				$('.addressError').removeAttr("hidden");
-				valid = false;
-			}
-			return valid;
-		};
-
-		function ValidatePhoneLength() {
-
-			var valid;
-			var phoneLength = $("#phone").val().trim().length;
-			if (phoneLength >= 5 && phoneLength <= 24) {
-				valid = true;
-				$('.phoneError').attr("hidden", "hidden");
-			} else {
-				$('.phoneError').removeAttr("hidden");
-				valid = false;
-			}
-			return valid;
-		};
-
-		function ValidateCityLength() {
-
-			var valid;
-			var cityLength = $("#city").val().trim().length;
-			if (cityLength >= 5 && cityLength <= 15) {
-				valid = true;
-				$('.cityError').attr("hidden", "hidden");
-			} else {
-				$('.cityError').removeAttr("hidden");
-				valid = false;
-			}
-			return valid;
-		};
-*/
 
 			$("#infoForm").validate({
 				errorClass: "error fail-alert",
@@ -452,28 +384,28 @@
 				messages: {
 					companyName: {
 						required: "Please fill this area",
-						minlength: "This Area should be at least 5 characters"
+					    minlength:" @Localizer["companyError"]"
 
 					},
 					contactName: {
 						required: "Please fill this area",
-						minlength: "This Area should be at least 5 characters"
+						minlength:" @Localizer["contactError"]"
 					},
 					address: {
 						required: "Please fill this area",
-						minlength: "This Area should be at least 5 characters"
+					minlength: "@Localizer["addressError"]"
 					},
 					city: {
 						required: "Please fill this area",
-						minlength: "This Area should be at least 5 characters"
+					minlength:"@Localizer["cityError"]"
 					},
 					country: {
 						required: "Please fill this area",
-						minlength: "This Area should be at least 5 characters"
+					minlength:"@Localizer["countryError"]"
 					},
 					phone: {
 						required: "Please fill this area",
-						minlength: "This Area should be at least 5 characters"
+					minlength:"@Localizer["phoneError"]"
 
 					}
 
@@ -489,3 +421,4 @@
 	});
 
 </script>
+	 
