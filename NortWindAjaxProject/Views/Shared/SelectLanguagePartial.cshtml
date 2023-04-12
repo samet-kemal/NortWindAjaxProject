@@ -18,7 +18,7 @@
 
 <div title="@Localizer["Request the culture provider:"]
      @currentRequestCulture?.Provider?.GetType().Name">
-    <form id="selectLanguage" asp-controller="Home"
+    <form id="selectLanguage" asp-controller="Language"
           asp-action="SetAppLanguage" asp-route-returnUrl="@responseUrl"
           method="post" class="form-horizontal" role="form">
         <label asp-for="@currentRequestCulture.RequestCulture.UICulture.Name">
@@ -31,3 +31,44 @@
         </select>
     </form>
 </div>
+<!--
+<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function(){
+
+        //$("[name='culture']").on("change",function(event){
+        //    console.log("item:",$(event.currentTarget).val());
+        //    ChangeLanguage($(event.currentTarget).val());
+        //});
+
+
+
+
+
+    });
+
+
+    function ChangeLanguage(culture) {
+        $.ajax({
+            url: "@Url.Action("ChangeLanguage","Language")",
+            method: "POST",
+            data: { "culture": culture },
+            success: function (res) {
+                @currentRequestCulture.RequestCulture=res;
+                console.log("changeLangRes:", res)
+            }, error: function () {
+                console.log("Failed To Load Supplier!");
+            }
+
+        });
+
+    }
+
+
+</script>
+
+
+-->

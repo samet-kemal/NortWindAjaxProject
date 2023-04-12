@@ -132,6 +132,9 @@
   <data name="cityError" xml:space="preserve">
     <value>Bu alanın doldurulması zorunlu ve uzunluğu  5-15 karakter olmalıdır.</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>Kapat</value>
+  </data>
   <data name="Company Name" xml:space="preserve">
     <value>Şirket Adı</value>
   </data>
@@ -153,8 +156,20 @@
   <data name="Create" xml:space="preserve">
     <value>Oluştur</value>
   </data>
+  <data name="CreateSuccess" xml:space="preserve">
+    <value>Tedarikçi Başarılı Bir Şekilde Oluşturuldu</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Sil</value>
+  </data>
+  <data name="DeleteConfirm" xml:space="preserve">
+    <value>Bu Tedarikçiyi Silmek istediğinize emiin misiniz?</value>
+  </data>
+  <data name="DeleteSuccess" xml:space="preserve">
+    <value>Tedarikçi Başarılı Bir Şekilde Silindi!</value>
+  </data>
+  <data name="formControlWarning" xml:space="preserve">
+    <value>Lütfen Form Bilgilerini Tekrar Kontrol Ediniz</value>
   </data>
   <data name="Phone" xml:space="preserve">
     <value>Telefon</value>
@@ -167,5 +182,8 @@
   </data>
   <data name="Update" xml:space="preserve">
     <value>Güncelle</value>
+  </data>
+  <data name="UpdateSuccess" xml:space="preserve">
+    <value>Tedarikçi Başarılı Bir Şekilde Güncellendi.</value>
   </data>
 </root>

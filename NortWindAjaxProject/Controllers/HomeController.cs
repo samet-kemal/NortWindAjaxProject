@@ -36,31 +36,6 @@ namespace NortWindAjaxProject.Controllers
 
 
 
-        [HttpPost]
-        public IActionResult SetAppLanguage(string culture, string returnUrl)
-        {
-            Response.Cookies.Append(
-                CookieRequestCultureProvider.DefaultCookieName,
-                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
-            );
-
-            return LocalRedirect(returnUrl);
-        }
-
-        public IActionResult SetCulture(string id = "en")
-        {
-            string culture = id;
-            Response.Cookies.Append(
-               CookieRequestCultureProvider.DefaultCookieName,
-               CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-               new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
-           );
-
-            ViewData["Message"] = "Culture set to " + culture;
-
-            return View("Privacy");
-        }
 
     }
 }

@@ -132,6 +132,9 @@
   <data name="cityError" xml:space="preserve">
     <value>This field is required and  must be between 5-15</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
   <data name="Company Name" xml:space="preserve">
     <value>Company Name</value>
   </data>
@@ -153,8 +156,20 @@
   <data name="Create" xml:space="preserve">
     <value>Create</value>
   </data>
+  <data name="CreateSuccess" xml:space="preserve">
+    <value>Supplier Created Successfully</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
+  </data>
+  <data name="DeleteConfirm" xml:space="preserve">
+    <value>Are You Sure? The Supplier Will Delete</value>
+  </data>
+  <data name="DeleteSuccess" xml:space="preserve">
+    <value>Supplier Deleted Successfully!</value>
+  </data>
+  <data name="formControlWarning" xml:space="preserve">
+    <value>Please Check Your Form İnformation Again!</value>
   </data>
   <data name="Index" xml:space="preserve">
     <value>İndeks</value>
@@ -163,12 +178,15 @@
     <value>Phone</value>
   </data>
   <data name="phoneError" xml:space="preserve">
-    <value>This field is required and must include 10 digits</value>
+    <value>This field is required and must include 9 digits</value>
   </data>
   <data name="Suppliers" xml:space="preserve">
     <value>Suppliers</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Update</value>
+  </data>
+  <data name="UpdateSuccess" xml:space="preserve">
+    <value>Supplier Updated Succesfully</value>
   </data>
 </root>
