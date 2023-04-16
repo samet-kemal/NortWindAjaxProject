@@ -121,10 +121,6 @@
 	</div>
 </div>
 
-
-
-
-
 <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
@@ -286,8 +282,6 @@
 
 		});
 
-
-
 		//-------------------------DELETE AJAX REQUEST-------------------------------------------//
 
 		$(document).on("click", ".deleteBtn", function (event) {
@@ -365,23 +359,7 @@
 
 		}
 
-
-
-
 		//------------------------Validation-------------------------------------//
-
-	@{
-		var currentRequestCulture = Context.Features.Get<IRequestCultureFeature>();
-
-	};		
-	
-
-	 var lang="@currentRequestCulture.RequestCulture.UICulture.Name";
-		console.log("lANGUAGE:"+lang);
-
-
-	
-
 
 			$("#infoForm").validate({
 				errorClass: "error fail-alert",

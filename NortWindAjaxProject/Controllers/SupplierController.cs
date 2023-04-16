@@ -17,7 +17,6 @@ namespace NortWindAjaxProject.Controllers
 
         public IActionResult Index()
         {
-            ViewData["Suppliers"] = _localizer["Suppliers"];
             return View();
         }
 

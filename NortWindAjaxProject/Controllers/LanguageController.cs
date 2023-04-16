@@ -1,41 +1,30 @@
 ﻿using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using NortWindAjaxProject.Services;
+using System.Globalization;
 
 namespace NortWindAjaxProject.Controllers
 {
-	public class LanguageController : Controller
-	{
-        [HttpPost]
-        public IActionResult SetAppLanguage(string culture, string returnUrl)
-        {
-            Response.Cookies.Append(
-                CookieRequestCultureProvider.DefaultCookieName,
-                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
-            );
 
-            return LocalRedirect(returnUrl);
+	public class LanguageController : Controller
+    {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public LanguageController(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
+        [HttpPost]
+        public IActionResult SetAppLanguage(CultureInfo culture)
+        {
+            var controller = (_httpContextAccessor.HttpContext.Request.Cookies["currentController"]);
+
+            // httpContext.Response.Cookies.Append("currentUrl", "~/" + culture.ToString() + "/" + controller.ToString(),cookieOptions);
+            var url="~/"+culture.ToString()+"/"+controller;
+
+            return LocalRedirect(url);
         }
 
 
-
-        /*
-        public IActionResult ChangeLanguage(string culture)
-        {
-            if (culture!=null)
-            {
-            Response.Cookies.Append(
-            CookieRequestCultureProvider.DefaultCookieName,
-            CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-            new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
-             );
-                return Ok(culture);
-            }
-            else
-            {
-                return BadRequest();
-            }
-
-        }*/
     }
 }
